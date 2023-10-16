@@ -1,3 +1,5 @@
+#!/bin/bash
+
 ROOT_DIR="$(pwd)"
 
 # Create external volume for the DB if does not exist.
