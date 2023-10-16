@@ -1,6 +1,7 @@
 <script setup>
 import TabMenu from 'primevue/tabmenu';
 import { ref } from 'vue';
+import LoginOrRegisterButton from './components/LoginOrRegisterButton.vue';
 
 const items = ref([
   {label: 'Menu', to: '/'},
@@ -11,6 +12,7 @@ const items = ref([
 
 <template>
   <div class="top-0">
+    <LoginOrRegisterButton></LoginOrRegisterButton>
     <TabMenu :model="items" />
     <router-view />
   </div>
