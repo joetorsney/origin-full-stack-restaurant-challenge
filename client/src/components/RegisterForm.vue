@@ -9,7 +9,7 @@ const message = ref('')
 
 const onSubmit = async () => {
     const body = JSON.stringify({username: username.value, password: password.value})
-    const URL = "https://localhost:8443/api/login/"
+    const URL = "https://localhost:8443/api/register/"
     const response = await fetch(URL, {
         method: "POST",
         headers: {"Content-type": "application/json"},
@@ -38,8 +38,8 @@ const onSubmit = async () => {
             <span class="p-inputgroup-addon">
                 <i class="pi pi-key"></i>
             </span>
-            <Password v-model="password" details.password placeholder="Password" :feedback="false" toggleMask/>
+            <Password v-model="password" details.password placeholder="Password" />
         </div>
-        <button type="submit" label="Submit">Login</button>
+        <button type="submit" label="Submit">Register</button>
     </form>
 </template>

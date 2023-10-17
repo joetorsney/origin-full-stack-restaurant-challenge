@@ -19,6 +19,17 @@ def random_delay():
     delta =  random.randint(60, 900)
     return datetime.now() + timedelta(seconds=delta)
 
+class User(Base):
+    __tablename__= 'user'
+
+    # For now, just use plaintext passwords
+    username = Column(Text, primary_key=True)
+    password = Column(Text, nullable=False)
+
+class Foo(Base):
+    __tablename__ = 'foo'
+
+    foo_id = Column(Text, primary_key=True)
 
 class PlateOrder(Base):
     __tablename__ = 'plate_order'

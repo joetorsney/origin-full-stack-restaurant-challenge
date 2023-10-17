@@ -1,10 +1,15 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
+from server.schemas import UserAuth
 
 router = APIRouter()
 
-@router.post("")
-async def login():
-    """Validate user credentials and supply JWT if appropriate
+@router.post("/")
+def login(data: UserAuth):
+    """Validate user data and supply JWT if appropriate
 
     """
-    return {"message": "hi"}
+    message = "fail"
+    if data.username == "joetorsney" and data.password == "password":
+        message = "success"
+
+    return {"message": message}

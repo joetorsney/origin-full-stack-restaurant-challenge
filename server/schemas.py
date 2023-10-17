@@ -4,6 +4,14 @@ from typing import List, Optional, Any
 from pydantic.utils import GetterDict
 from pydantic import BaseModel
 
+class UserAuth(BaseModel):
+    username: str
+    password: str
+
+class User(UserAuth):
+    
+    class Config:
+        orm_mode: True
 
 class PlateBase(BaseModel):
     plate_name: str
