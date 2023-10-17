@@ -7,6 +7,8 @@ const username = ref('')
 const password = ref('')
 const message = ref('')
 
+const emit = defineEmits(['success'])
+
 const onSubmit = async () => {
     const body = JSON.stringify({username: username.value, password: password.value})
     const URL = "https://localhost:8443/api/login/"
@@ -14,12 +16,18 @@ const onSubmit = async () => {
         method: "POST",
         headers: {"Content-type": "application/json"},
         body
-    });
+    })
 
     const data = await response.json();
-    console.log(data)
-    message.value = data.message 
-    
+
+    if (response.ok) {
+        localStorage.setItem('access_token', data.access_token)
+        localStorage.setItem('token_type', data.token_type)
+        emit('success')
+        return
+    }
+
+    message.value = data.detail
 }
 
 </script>

@@ -8,11 +8,24 @@ const items = ref([
   {label: 'Orders', to: '/orders'},
 ]);
 
+const token = ref(localStorage.getItem('access_token'))
+
+const updateToken = () => {
+  token.value = localStorage.getItem('access_token')
+}
+
+const handleLogout = () => {
+  localStorage.clear()
+  updateToken()
+}
+
 </script>
 
 <template>
   <div class="top-0">
-    <LoginOrRegisterButton></LoginOrRegisterButton>
+    <p v-if="token">Welcome, {{ token }}</p>
+    <button v-if="token" @click="handleLogout">Log out</button>
+    <LoginOrRegisterButton v-else @loginSuccess="updateToken"></LoginOrRegisterButton>
     <TabMenu :model="items" />
     <router-view />
   </div>
