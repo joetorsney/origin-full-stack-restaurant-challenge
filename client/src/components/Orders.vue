@@ -40,8 +40,13 @@ onMounted(async () => {
     plates.value = data;
 
     // fetch orders from server
+    const token = localStorage.getItem('access_token')
     const URL_ORDERS = "https://localhost:8443/api/orders"
-    const response_orders = await fetch(URL_ORDERS);
+    const response_orders = await fetch(URL_ORDERS, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
     const data_orders = await response_orders.json();
     orders.value = data_orders;
 });

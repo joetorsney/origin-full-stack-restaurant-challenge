@@ -1,14 +1,16 @@
 <script setup>
-    import { ref, watch } from "vue";
+    import { ref } from "vue";
+    import OrderList from 'primevue/orderlist';
+    import Button from 'primevue/button';
 
     const emit = defineEmits(['checkout'])
     
     const cart = ref([])
     const cartTotal = ref(0)
-    const disableCheckout = ref(false)
 
-    // TODO prevent user from checking out if their cart is empty
-    watch(cart, (newCart) => {console.log(newCart); disableCheckout.value = newCart.length < 1}, {deep: true})
+    const disableCheckout = () => {
+        return cart.value.length == 0
+    }
 
     const addToCart = (addedPlate) => {
         // Update the quantity of the product in the cart, adding it to the cart
@@ -19,14 +21,16 @@
 
         if (cartPlateIndex == -1) {
             cart.value.push({ ...addedPlate, quantity: 1 })
-            return
+        } else {
+            cart.value[cartPlateIndex].quantity += 1
         }
 
-        cart.value[cartPlateIndex].quantity += 1
+        updateDisableCheckout()
     }
 
-    const removeFromCart = (removedPlate, plateIndex) => {
+    const removeFromCart = (removedPlate) => {
         cartTotal.value -= removedPlate.price
+        const plateIndex = cart.value.findIndex(plate => plate.plate_id == removedPlate.plate_id)
 
         if (cart.value[plateIndex].quantity > 1) {
             cart.value[plateIndex].quantity -= 1
@@ -44,12 +48,25 @@
 </script>
 
 <template>
-    <p>Your cart {{ disableCheckout }}</p>
-    <div v-for="plate, plateIndex in cart">
-        <span>{{ plate.plate_name }} x{{ plate.quantity }}</span>
-        <span>{{ plate.price * plate.quantity }} €</span>
-        <button @click="removeFromCart(plate, plateIndex)" :disabled="disableCheckout">-</button>
-    </div>
-    <p>Total: {{ cartTotal }} €</p>
-    <button @click.prevent="onCheckout">Checkout</button>
+    <OrderList v-model="cart" listStyle="height:auto" dataKey="i">
+        <template #header>
+            <div class="flex gap-5 justify-content-between">
+                <div class="flex gap-5">
+                    <span class="flex align-items-center">My Cart</span>
+                    <span class="flex align-items-center">Total: {{ cartTotal }} €</span>
+                </div>
+                <Button label="Checkout" iconPos="left" icon="pi pi-shopping-cart" @click.prevent="onCheckout" :disabled="disableCheckout()"></Button> 
+            </div>
+        </template>
+
+        <template #item="slotProps">
+            <div class="flex flex-wrap p-2 align-items-center gap-3">
+                <div class="flex-1 flex flex-column gap-2">
+                    <span class="font-bold w-10rem">{{ slotProps.item.quantity }} x {{ slotProps.item.plate_name }}</span>
+                </div>
+                <span class="font-bold text-900">{{ slotProps.item.price * slotProps.item.quantity }} €</span>
+                <Button icon="pi pi-minus" routnded @click="removeFromCart(slotProps.item)"></Button>
+            </div>
+        </template>
+    </OrderList>
 </template>

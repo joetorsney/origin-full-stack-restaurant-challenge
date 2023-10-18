@@ -1,5 +1,7 @@
 <template>
-    <ShoppingCart ref="cartRef" @checkout="onCheckoutCart"/>
+    <div class="card">
+        <ShoppingCart ref="cartRef" @checkout="onCheckoutCart"/>
+    </div>
     <div class="card">
         <DataView :value="plates" :layout="layout">
             <template #header>
@@ -71,14 +73,15 @@ onMounted(async () => {
 });
 
 const onCheckoutCart = async (cart) => {
-    console.log(access_token)
     if (!access_token) return
 
     const body = JSON.stringify({plates: cart})
     const URL = "https://localhost:8443/api/orders"
     const response = await fetch(URL, {
         method: "POST",
-        headers: {"Content-type": "application/json"},
+        headers: {
+            Authorization: `Bearer ${access_token}`,
+            "Content-type": "application/json"},
         body
     })
 
