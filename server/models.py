@@ -26,10 +26,7 @@ class User(Base):
     username = Column(Text, primary_key=True)
     password = Column(Text, nullable=False)
 
-class Foo(Base):
-    __tablename__ = 'foo'
-
-    foo_id = Column(Text, primary_key=True)
+    orders = relationship('Order', back_populates="user")
 
 class PlateOrder(Base):
     __tablename__ = 'plate_order'
@@ -40,7 +37,6 @@ class PlateOrder(Base):
     
     plate = relationship("Plate", back_populates="orders")
     order = relationship("Order", back_populates="plates")
-
 
 class Plate(Base):
     __tablename__ = "plate"
@@ -58,8 +54,10 @@ class Order(Base):
 
     order_id = Column(Integer, primary_key=True)
     order_time = Column(DateTime(timezone=True), default=datetime.now, nullable=False)
+    username = Column(ForeignKey("user.username"))
 
     __finish_time = Column(DateTime(timezone=True), default=random_delay, nullable=False)
 
     plates = relationship("PlateOrder", back_populates="order")
+    user = relationship('User', back_populates="orders")
 
