@@ -5,11 +5,13 @@ from server.schemas import OrderBase
 import server.models as md
 
 
-def get_orders(db_session: Session):
-    return db_session.query(md.Order).all()
+def get_orders(db_session: Session, current_user: md.User):
+    print(current_user.username)
+    orders = db_session.query(md.Order).filter(md.Order.username == current_user.username).all()
+    print(orders)
+    return orders
 
-
-def add_order(db_session: Session, item: OrderBase):
+def add_order(db_session: Session, item: OrderBase, current_user: md.User):
     # Check if all plates exist.
     plate_ids = [plate.plate_id for plate in item.plates]
     plate_ids_result = db_session.query(md.Plate.plate_id).filter(
@@ -38,6 +40,8 @@ def add_order(db_session: Session, item: OrderBase):
             quantity=plate.quantity
         )
         order.plates.append(plate_order)
+    
+    order.username = current_user.username
 
     db_session.add(order)
     db_session.commit()
