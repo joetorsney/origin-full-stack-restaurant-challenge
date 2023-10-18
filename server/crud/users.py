@@ -6,8 +6,8 @@ import server.models as md
 def get_users(db_session: Session):
     return db_session.query(md.User).all()
 
-def get_user_from_username(db_session: Session, item: md.User):
-    result = db_session.query(md.User).filter(md.User.username == item.username)
+def get_user_from_username(db_session: Session, username: str):
+    result = db_session.query(md.User).filter(md.User.username == username)
     return result.first()
 
 def add_user(db_session: Session, item: md.User):

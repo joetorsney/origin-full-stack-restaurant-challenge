@@ -10,11 +10,15 @@ const message = ref('')
 const emit = defineEmits(['success'])
 
 const onSubmit = async () => {
-    const body = JSON.stringify({username: username.value, password: password.value})
-    const URL = "https://localhost:8443/api/login/"
+    const body = new URLSearchParams({
+        username: username.value,
+        password: password.value
+    })
+    
+    const URL = "https://localhost:8443/api/login"
     const response = await fetch(URL, {
         method: "POST",
-        headers: {"Content-type": "application/json"},
+        headers: {"Content-type": "application/x-www-form-urlencoded"},
         body
     })
 

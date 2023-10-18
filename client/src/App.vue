@@ -6,6 +6,7 @@ import LoginOrRegisterButton from './components/LoginOrRegisterButton.vue';
 const items = ref([
   {label: 'Menu', to: '/'},
   {label: 'Orders', to: '/orders'},
+  {label: 'User', to: '/user'}
 ]);
 
 const token = ref(localStorage.getItem('access_token'))
