@@ -1,4 +1,5 @@
 <template>
+    <Message v-if="displayMustLoginMessage" severity="error">You must be logged in to checkout</Message>
     <div class="card">
         <ShoppingCart ref="cartRef" @checkout="onCheckoutCart"/>
     </div>
@@ -48,6 +49,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import Button from 'primevue/button';
+import Message from 'primevue/message';
 
 import DataView from 'primevue/dataview';
 import DataViewLayoutOptions from 'primevue/dataviewlayoutoptions'   // optional
@@ -57,6 +59,7 @@ import ShoppingCart from './ShoppingCart.vue';
 const plates = ref();
 const cartRef = ref(null);
 const layout = ref('grid');
+const displayMustLoginMessage = ref(false)
 
 const access_token = localStorage.getItem('access_token')
 
@@ -73,7 +76,10 @@ onMounted(async () => {
 });
 
 const onCheckoutCart = async (cart) => {
-    if (!access_token) return
+    if (!access_token) {
+        displayMustLoginMessage.value = true;
+        return
+    }
 
     const body = JSON.stringify({plates: cart})
     const URL = "https://localhost:8443/api/orders"

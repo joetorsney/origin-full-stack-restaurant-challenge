@@ -27,7 +27,7 @@
 
 <script setup>
 import OrderList from 'primevue/orderlist';
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted } from 'vue';
 
 const orders = ref(null);
 const plates = ref();

@@ -1,6 +1,7 @@
 <script setup>
-import TabMenu from 'primevue/tabmenu';
 import { ref } from 'vue';
+import TabMenu from 'primevue/tabmenu';
+import Button from 'primevue/button';
 import LoginOrRegisterButton from './components/LoginOrRegisterButton.vue';
 
 const items = ref([
@@ -24,9 +25,11 @@ const handleLogout = () => {
 
 <template>
   <div class="top-0">
-    <p v-if="token">Welcome, {{ token }}</p>
-    <button v-if="token" @click="handleLogout">Log out</button>
-    <LoginOrRegisterButton v-else @loginSuccess="updateToken"></LoginOrRegisterButton>
+    <div class="flex flex-row-reverse justify-content-between">
+      <Button icon="pi pi-key" v-if="token" label="Log out" @click="handleLogout" />
+      <LoginOrRegisterButton v-else @loginSuccess="updateToken"></LoginOrRegisterButton>
+      <span class="flex align-items-center" v-if="token">Hello, {{ token }}</span>
+    </div>
     <TabMenu :model="items" />
     <router-view />
   </div>
